@@ -4771,40 +4771,56 @@ export default function App() {
                         </div>
 
                         {/* Numeric Profile Matrix */}
-                        <div className="col-span-8 bg-white/[0.015] border border-white/10 rounded-sm p-5 flex flex-col justify-between relative overflow-hidden">
-                          <div>
-                            <span className="text-[7.5px] font-mono tracking-widest text-white/30 uppercase block">METRIC CONSOLE</span>
-                            
-                            <div className="grid grid-cols-2 gap-x-6 gap-y-4 mt-4">
-                              <div className="space-y-0.5 pb-2 border-b border-white/5">
-                                <span className="text-[8px] font-mono tracking-widest text-white/40 uppercase block">Captured Sessions</span>
-                                <span className="text-xl font-light text-white font-sans">{archivedWorkouts.length} SECURED</span>
-                              </div>
-                              <div className="space-y-0.5 pb-2 border-b border-white/10">
-                                <span className="text-[8px] font-mono tracking-widest text-white/40 uppercase block">Volume Lifted</span>
-                                <span className="text-xl font-bold text-gym-accent font-sans">{(totalLifetimeVolume || 0).toLocaleString()} <span className="text-[10px] text-white/40 font-light">kg</span></span>
-                              </div>
-                              <div className="space-y-0.5">
-                                <span className="text-[8px] font-mono tracking-widest text-white/40 uppercase block">Active Training Days</span>
-                                <span className="text-lg font-light text-white font-sans">{profile?.streakCount || 0} Streak</span>
-                              </div>
-                              <div className="space-y-0.5">
-                                <span className="text-[8px] font-mono tracking-widest text-white/40 uppercase block">Energy Reserves</span>
-                                <span className="text-lg font-light text-white font-sans">{(profile?.avatarCredits || 0).toLocaleString()} CR</span>
-                              </div>
-                            </div>
-                          </div>
+                        {(() => {
+                          const dailyDataForReport = getDailyCaloriesData();
+                          const totalReportCaloriesBurned = dailyDataForReport.reduce((sum, d) => sum + d.calories, 0);
+                          const reportAvgCaloriesBurn = dailyDataForReport.length > 0 ? Math.round(totalReportCaloriesBurned / dailyDataForReport.length) : 0;
 
-                          <div className="border-t border-white/5 pt-4 mt-5 flex items-center justify-between">
-                            <div>
-                              <span className="text-[7.5px] font-mono tracking-widest text-white/30 uppercase block">RANKING CLASSIFICATION</span>
-                              <span className="text-base font-serif italic text-gym-accent block leading-none mt-1">{currentRankName}</span>
+                          return (
+                            <div className="col-span-8 bg-white/[0.015] border border-white/10 rounded-sm p-5 flex flex-col justify-between relative overflow-hidden">
+                              <div>
+                                <span className="text-[7.5px] font-mono tracking-widest text-white/30 uppercase block">METRIC CONSOLE</span>
+                                
+                                <div className="grid grid-cols-2 gap-x-6 gap-y-4 mt-4">
+                                  <div className="space-y-0.5 pb-2 border-b border-white/5">
+                                    <span className="text-[8px] font-mono tracking-widest text-white/40 uppercase block">Captured Sessions</span>
+                                    <span className="text-xl font-light text-white font-sans">{archivedWorkouts.length} SECURED</span>
+                                  </div>
+                                  <div className="space-y-0.5 pb-2 border-b border-white/10">
+                                    <span className="text-[8px] font-mono tracking-widest text-white/40 uppercase block">Volume Lifted</span>
+                                    <span className="text-xl font-bold text-gym-accent font-sans">{(totalLifetimeVolume || 0).toLocaleString()} <span className="text-[10px] text-white/40 font-light">kg</span></span>
+                                  </div>
+                                  <div className="space-y-0.5 pb-2 border-b border-white/5">
+                                    <span className="text-[8px] font-mono tracking-widest text-white/40 uppercase block">Total Calories Burned</span>
+                                    <span className="text-xl font-bold text-gym-accent font-sans">{totalReportCaloriesBurned.toLocaleString()} <span className="text-[10px] text-white/40 font-light">kcal</span></span>
+                                  </div>
+                                  <div className="space-y-0.5 pb-2 border-b border-white/5">
+                                    <span className="text-[8px] font-mono tracking-widest text-white/40 uppercase block">Avg Session Burn</span>
+                                    <span className="text-xl font-light text-white font-sans">{reportAvgCaloriesBurn.toLocaleString()} <span className="text-[10px] text-white/40 font-light">kcal</span></span>
+                                  </div>
+                                  <div className="space-y-0.5">
+                                    <span className="text-[8px] font-mono tracking-widest text-white/40 uppercase block">Active Training Days</span>
+                                    <span className="text-lg font-light text-white font-sans">{profile?.streakCount || 0} Streak</span>
+                                  </div>
+                                  <div className="space-y-0.5">
+                                    <span className="text-[8px] font-mono tracking-widest text-white/40 uppercase block">Energy Reserves</span>
+                                    <span className="text-lg font-light text-white font-sans">{(profile?.avatarCredits || 0).toLocaleString()} CR</span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="border-t border-white/5 pt-4 mt-5 flex items-center justify-between">
+                                <div>
+                                  <span className="text-[7.5px] font-mono tracking-widest text-white/30 uppercase block">RANKING CLASSIFICATION</span>
+                                  <span className="text-base font-serif italic text-gym-accent block leading-none mt-1">{currentRankName}</span>
+                                </div>
+                                <div className="w-10 h-10 rounded-full border border-gym-accent/20 bg-gym-accent/5 flex items-center justify-center">
+                                  <Trophy className="w-5 h-5 text-gym-accent" />
+                                </div>
+                              </div>
                             </div>
-                            <div className="w-10 h-10 rounded-full border border-gym-accent/20 bg-gym-accent/5 flex items-center justify-center">
-                              <Trophy className="w-5 h-5 text-gym-accent" />
-                            </div>
-                          </div>
-                        </div>
+                          );
+                        })()}
                       </div>
 
                       {/* Chart Section 1: Physical Progress Area Chart */}
